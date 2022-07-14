@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+  </head>
+  <body>
+    hello world
+    <script>
+      const variables = { id: 24, name: "Loveth" };
+      const query = {
+        type: "getUser",
+        return: {
+          id: "i",
+          address: {
+            id: "i",
+            geodata: {
+              id: "i",
+              bio: {
+                id: "i",
+                timeline: {
+                  date: "s",
+                },
+              },
+            },
+          },
+        },
+      };
+
+      fetch("http://localhost/simple-php-framework/test", {
+        method: "post",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({ query, variables }),
+      })
+        .then((d) => {
+          return d.json();
+        })
+        .then((v) => console.log(v))
+        .catch((e) => console.log(e.message));
+    </script>
+  </body>
+</html>

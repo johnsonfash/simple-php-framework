@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      form {
+        margin: 5rem auto;
+        position: relative;
+        box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.1),
+          -1px -1px 3px rgba(0, 0, 0, 0.05);
+        max-width: 400px;
+        border-radius: 7px;
+        padding: 1rem;
+      }
+      input,
+      button {
+        width: 100%;
+        margin: 1rem 0;
+        display: block;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        padding: 0.7rem;
+        box-sizing: border-box;
+      }
+      h1 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <form onsubmit="handleSubmit(e)">
+        <h1>Login</h1>
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder="e.g you@mail.com"
+        />
+        <input type="password" name="password" required placeholder="******" />
+        <button type="submit">Login</button>
+      </form>
+    </main>
+    <script nomodule defer src="js.cookie.js"></script>
+    <script nomodule defer src="jwt-decode.js"></script>
+    <script>
+            // Cookies.set("foo", "bar");
+            // var decoded = jwt_decode(token);
+      function handleSubmit(e) {
+        e.preventDefault();
+      }
+    </script>
+  </body>
+</html>

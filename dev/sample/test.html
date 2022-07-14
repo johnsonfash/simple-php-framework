@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+  </head>
+  <body>
+    <script>
+      const request = {
+        type: "accountData",
+        return: {
+          name: "string",
+          age: "integer",
+          info: {
+            address: [
+              {
+                state: "string",
+                laws: "array",
+              },
+            ],
+            image: "string",
+          },
+        },
+      };
+
+      const variables = { id: 1 };
+
+      fetch("http://localhost:8080/graphy/test.php", {
+        method: "post",
+        headers: { "content-type": "application/json " },
+        body: JSON.stringify({ request, variables }),
+        // body: JSON.stringify({ query, variables }),
+      })
+        .then((raw) => raw.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err));
+
+      // const query = {
+      //   api: "userDetails",
+      //   graph: {
+      //     id: "integer!",
+      //     property: {
+      //       name: "string!",
+      //       age: "integer!",
+      //       test: {
+      //         testing: "integer!",
+      //       },
+      //     },
+      //   },
+      // };
+
+      // const variables = {
+      //   id: 1,
+      //   property: {
+      //     name: "Tosin Fashanu",
+      //     age: 23,
+      //     test: {
+      //       testing: "this is it",
+      //     },
+      //   },
+      // };
+
+      // fetch("http://localhost:8080/graphy/test.php", {
+      //   method: "post",
+      //   headers: { "content-type": "application/json " },
+      //   body: JSON.stringify({ request, variables }),
+      //   // body: JSON.stringify({ query, variables }),
+      // })
+      //   .then((raw) => raw.json())
+      //   .then((data) => console.log(data))
+      //   .catch((err) => console.log(err));
+    </script>
+  </body>
+</html>
