@@ -8,7 +8,9 @@ interface testType
 {
   const getUser = [
     graph::input => [
-      "id" => graph::integerNotNull
+      "id" => [graph::integerNotNull],
+      "game" => graph::integerNotNull,
+      "test" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,

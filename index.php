@@ -8,19 +8,9 @@ use database\db;
 use enum\graph;
 use handler\typehandler;
 
-use function PHPSTORM_META\type;
-
 header::options();
 
 header::showError();
-
-
-// try {
-//   throw new Exception('I was throw', 400);
-// } catch (\Throwable $e) {
-//   echo json_encode(['error' => true, 'errorMessage' => $e->getMessage(), 'errorCode' => $e->getCode()]);
-// }
-
 
 router::get('/', function () {
   return view::load('test.html');
@@ -29,7 +19,7 @@ router::get('/', function () {
 router::json('/test', function ($request) {
   $type = typehandler::getConstant('static', 'getUser');
   // $retn_handler = typehandler::returnCheck2($type['data']['return'], $request->query->return);
-  $retn_handler = typehandler::inputCheck($type['data']['input'], $request->variables);
+  $retn_handler = typehandler::inputCheck3($type['data']['input'], $request->variables);
   return json_encode($retn_handler);
   return json_encode($type);
 });

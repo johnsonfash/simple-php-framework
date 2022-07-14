@@ -104,6 +104,95 @@ class type
     }
   }
 
+  public static function inputCheck3($backendInput, $frontendInput)
+  {
+    try {
+      $diff = array_diff(array_keys((array) $frontendInput),  array_keys($backendInput));
+      if ($diff) throw new Exception("variables." . utils::first($diff) . " is not available as an input key for the request type");
+      foreach ($backendInput as $key => $value) {
+        if (is_string($value)) {
+          if (strpos($value, '!') !== false) {
+            if (!isset($frontendInput) || empty(@$frontendInput->$key))  throw new Exception("input key '$key' must be PROVIDED and NOT NULL");
+            if (!in_array(gettype($frontendInput->$key), graph::types) || gettype($frontendInput->$key)[0] != $value[0]) throw new Exception("input '$key' of type " . gettype($frontendInput->$key) . " is not allowed");
+          } else if (isset($frontendInput->$key)) {
+            if (gettype($frontendInput->$key)[0] != $value[0]) throw new Exception("input '$key' of type " . gettype($frontendInput->$key->$key) . " is not allowed");
+          }
+        } else if (is_array($value)) {
+          if (strpos($value[0], '!') !== false) {
+            if (empty($frontendInput->$key) || gettype(@$frontendInput->$key) != 'array') {
+            }
+          }
+          if ((strpos($value[0], '!') !== false) && (!isset($frontendInput->$key) || gettype(@$frontendInput->$key) != 'array' || empty(@$frontendInput->$key))) {
+            throw new Exception("input key '$key' is NOT SET / NOT ARRAY / EMPTY");
+          }
+          if (isset($frontendInput->$key)) {
+            foreach ($frontendInput->$key as $_val) {
+              if (gettype($_val)[0] != $value[0][0])  throw new Exception("input key '$key' value of type " . gettype($_val) . " is not allowed");
+            }
+          }
+        } else {
+          throw new Exception("input '$key' of type " . gettype($frontendInput->$key) . " is not allowed");
+        }
+      }
+      return [graph::error => false];
+    } catch (\Throwable $e) {
+      return [graph::error => true, graph::errorMessage => $e->getMessage(), graph::trace => self::$stackTrace];
+    }
+  }
+
+  public static function inputCheck($input, $variables)
+  {
+    $count = 0;
+    $response =  ["error" => false, "errorMessage" => null];
+    $diff = array_diff(array_keys((array) $variables),  array_keys($input));
+    if ($diff) {
+      return ['error' => true, 'errorMessage' => "variables." . utils::first($diff) . " is not available as an input key for the request type"];
+    }
+    foreach ($input as $key => $value) {
+      if (in_array(strtoupper($key), graph::abortKeys)) {
+        return ['error' => true, "errorMessage" => "input key '$key' is a reserved keyword"];
+      }
+      if (is_array($value)) {
+        if (!isset($variables->$key) && strpos($value[0], '!') !== false) {
+          return ['error' => true, "errorMessage" => "required varible key $key was not included"];
+        } else if (isset($variables->$key)) {
+          if (!is_array($variables->$key)) {
+            return ['error' => true, "errorMessage" => "required varibles key '$key' in variables.$key needs to be an array"];
+          }
+          foreach ($variables->$key as $v) {
+            if (gettype($v)[0] !== $value[0][0]) {
+              return ["error" => true, "errorMessage" => "type $value[0] was required for variable key but received " . gettype($v)];
+            }
+          }
+        }
+      } else if (is_object($value)) {
+        return self::inputCheck($value, $variables->$key);
+      } else {
+        if (strpos($value, '!') !== false) {
+          $typeof = explode('!', strtolower($value));
+          $typeof = trim($typeof[0]);
+          if (in_array($typeof, graph::types)) {
+            if (!isset($variables->$key)) {
+              return ['error' => true, "errorMessage" => "required varible key '$key' of type '$typeof' was not included"];
+            }
+            $v_type = gettype($variables->$key);
+            if ($v_type[0] !== $typeof[0]) {
+              return ["error" => true, "errorMessage" => "type definition input.$key of '$typeof' and variables.$key of $v_type did not match"];
+            }
+          } else {
+            return ["error" => true, "errorMessage" => "type '$typeof' defined in input query is invalid"];
+          }
+        } else {
+          if (isset($variables->$key) && (gettype($variables->$key)[0] !== strtolower($value)[0])) {
+            return ["error" => true, "errorMessage" => "variables." . array_search($variables->$key, (array)$variables) . " value of type '" . gettype($variables->$key) . "' is invalid"];
+          }
+        }
+      }
+      $count++;
+    }
+    return $response;
+  }
+
 
   public static function inputCheck2($backendInput, $frontendInput)
   {
@@ -187,58 +276,6 @@ class type
     return $response;
   }
 
-  public static function inputCheck($input, $variables)
-  {
-    $count = 0;
-    $response =  ["error" => false, "errorMessage" => null];
-    $diff = array_diff(array_keys((array) $variables),  array_keys($input));
-    if ($diff) {
-      return ['error' => true, 'errorMessage' => "variables." . utils::first($diff) . " is not available as an input key for the request type"];
-    }
-    foreach ($input as $key => $value) {
-      if (in_array(strtoupper($key), graph::abortKeys)) {
-        return ['error' => true, "errorMessage" => "input key '$key' is a reserved keyword"];
-      }
-      if (is_array($value)) {
-        if (!isset($variables->$key) && strpos($value[0], '!') !== false) {
-          return ['error' => true, "errorMessage" => "required varible key $key was not included"];
-        } else if (isset($variables->$key)) {
-          if (!is_array($variables->$key)) {
-            return ['error' => true, "errorMessage" => "required varibles key '$key' in variables.$key needs to be an array"];
-          }
-          foreach ($variables->$key as $v) {
-            if (gettype($v)[0] !== $value[0][0]) {
-              return ["error" => true, "errorMessage" => "type $value[0] was required for variable key but received " . gettype($v)];
-            }
-          }
-        }
-      } else if (is_object($value)) {
-        return self::inputCheck($value, $variables->$key);
-      } else {
-        if (strpos($value, '!') !== false) {
-          $typeof = explode('!', strtolower($value));
-          $typeof = trim($typeof[0]);
-          if (in_array($typeof, graph::types)) {
-            if (!isset($variables->$key)) {
-              return ['error' => true, "errorMessage" => "required varible key '$key' of type '$typeof' was not included"];
-            }
-            $v_type = gettype($variables->$key);
-            if ($v_type[0] !== $typeof[0]) {
-              return ["error" => true, "errorMessage" => "type definition input.$key of '$typeof' and variables.$key of $v_type did not match"];
-            }
-          } else {
-            return ["error" => true, "errorMessage" => "type '$typeof' defined in input query is invalid"];
-          }
-        } else {
-          if (isset($variables->$key) && (gettype($variables->$key)[0] !== strtolower($value)[0])) {
-            return ["error" => true, "errorMessage" => "variables." . array_search($variables->$key, (array)$variables) . " value of type '" . gettype($variables->$key) . "' is invalid"];
-          }
-        }
-      }
-      $count++;
-    }
-    return $response;
-  }
 
   public static function getTypes()
   {
