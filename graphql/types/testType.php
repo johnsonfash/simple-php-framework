@@ -18,7 +18,7 @@ interface testType
       "username" => graph::string,
       "first_name" => graph::string,
       "last_name" => graph::string,
-      "age" => graph::string,
+      "age" => graph::integer,
       "created_at" => graph::string,
       "address" => [
         graph::type => "getAddress",
@@ -103,7 +103,7 @@ interface testType
       "id" => graph::integer,
       "user_id" => graph::integer,
       "header" => graph::string,
-      "details" => graph::string,
+      "detail" => graph::string,
       "created_at" => graph::string,
       "history" => [
         graph::type => "getHistory",
