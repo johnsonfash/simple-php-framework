@@ -91,6 +91,7 @@ interface graph
   const stringNotNull = 'string!';
   const null = 'null';
   const double = 'double';
+  const float = 'float';
   const doubleNotNull = 'double!';
   const types = [
     "array", "a",

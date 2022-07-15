@@ -112,7 +112,7 @@ class control
    * @param array $batched_array query values in array
    * @param array $new_array combined nexted + main query structure
    * @param string $starting_key main query type to start with
-   * @return array
+   * @return mixed
    */
   public static function combiner($frontendReturn, $batched_array, &$new_array, $starting_key)
   {
@@ -128,6 +128,20 @@ class control
       return $new_array;
     } else {
       return $batched_array[$starting_key];
+      switch ($frontendReturn[0]) {
+        case 'b':
+          return (bool) $batched_array[$starting_key];
+        case 'i':
+          return (int) $batched_array[$starting_key];
+        case 'd':
+          return (float) $batched_array[$starting_key];
+        case 'f':
+          return (float) $batched_array[$starting_key];
+        case 's':
+          return trim(json_encode($batched_array[$starting_key]), "\"..'");
+        default:
+          return $batched_array[$starting_key];
+      }
     }
   }
 }

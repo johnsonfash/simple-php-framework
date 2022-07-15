@@ -6,6 +6,8 @@ use enum\graph;
 
 interface testType
 {
+
+
   const getUser = [
     graph::input => [
       "id" => graph::integerNotNull,

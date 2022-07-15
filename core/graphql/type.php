@@ -86,6 +86,9 @@ class type
         }
         return [graph::error => false];
       }
+
+      if (!is_string($backendReturn) && is_string($frontendReturn)) throw new Exception("return type for this query cannot be $frontendReturn");
+
       foreach ($frontendReturn as $key => $value) {
         is_object($value) ? self::$stackTrace .= "[$key]--" : self::$stackTrace .= "$key--";
         if (!isset($backendReturn[$key])) throw new Exception("return key '$key' is not present in the avaliable return type");
