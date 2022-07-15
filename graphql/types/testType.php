@@ -14,10 +14,16 @@ interface testType
     ],
     graph::return => [
       "id" => graph::integer,
+      "email" => graph::string,
+      "username" => graph::string,
+      "first_name" => graph::string,
+      "last_name" => graph::string,
+      "age" => graph::string,
+      "created_at" => graph::string,
       "address" => [
         graph::type => "getAddress",
         graph::input => [
-          "id" => "parent.id"
+          "user_id" => "parent.id"
         ]
       ]
     ]
@@ -25,14 +31,21 @@ interface testType
 
   const getAddress = [
     graph::input => [
-      "id" => graph::integerNotNull
+      "id" => graph::integer,
+      "user_id" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,
+      "user_id" => graph::integer,
+      "country" => graph::string,
+      "state" => graph::string,
+      "lga" => graph::string,
+      "address" => graph::string,
+      "created_at" => graph::string,
       "geodata" => [
         graph::type => "getGeoData",
         graph::input => [
-          "id" => "parent.id"
+          "address_id" => "parent.id"
         ]
       ]
     ]
@@ -41,14 +54,20 @@ interface testType
 
   const getGeoData = [
     graph::input => [
-      "id" => graph::integerNotNull
+      "id" => graph::integerNotNull,
+      "address_id" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,
+      "address_id" => graph::integer,
+      "user_id" => graph::integer,
+      "lat" => graph::string,
+      "lng" => graph::string,
+      "created_at" => graph::string,
       "bio" => [
         graph::type => "getBio",
         graph::input => [
-          "id" => "parent.id"
+          "user_id" => "parent.user_id"
         ]
       ]
     ]
@@ -56,14 +75,20 @@ interface testType
 
   const getBio = [
     graph::input => [
-      "id" => graph::integerNotNull
+      "id" => graph::integerNotNull,
+      "user_id" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,
+      "user_id" => graph::integer,
+      "user_type" => graph::string,
+      "bio" => graph::string,
+      "likes" => graph::string,
+      "created_at" => graph::string,
       "timeline" => [
         graph::type => "getTimeline",
         graph::input => [
-          "id" => "parent.id"
+          "user_id" => "parent.user_id"
         ]
       ]
     ]
@@ -72,13 +97,18 @@ interface testType
   const getTimeline = [
     graph::input => [
       "id" => graph::integerNotNull,
+      "user_id" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,
+      "user_id" => graph::integer,
+      "header" => graph::string,
+      "details" => graph::string,
+      "created_at" => graph::string,
       "history" => [
         graph::type => "getHistory",
         graph::input => [
-          "id" => "parent.id"
+          "user_id" => "parent.user_id"
         ]
       ]
     ]
@@ -87,13 +117,17 @@ interface testType
   const getHistory = [
     graph::input => [
       "id" => graph::integerNotNull,
+      "user_id" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,
+      "user_id" => graph::integer,
+      "activity" => graph::string,
+      "created_at" => graph::string,
       "status" => [
         graph::type => "getStatus",
         graph::input => [
-          "id" => "parent.id"
+          "user_id" => "parent.user_id"
         ]
       ]
     ]
@@ -102,13 +136,18 @@ interface testType
   const getStatus = [
     graph::input => [
       "id" => graph::integerNotNull,
+      "user_id" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,
-      "status" => [
+      "user_id" => graph::integer,
+      "status" => graph::string,
+      "details" => graph::string,
+      "created_at" => graph::string,
+      "payment" => [
         graph::type => "getPayment",
         graph::input => [
-          "id" => "parent.id"
+          "user_id" => "parent.user_id"
         ]
       ]
     ]
@@ -117,40 +156,15 @@ interface testType
   const getPayment = [
     graph::input => [
       "id" => graph::integerNotNull,
+      "user_id" => graph::integer
     ],
     graph::return => [
       "id" => graph::integer,
-      "status" => [
-        graph::type => "getRemit",
-        graph::input => [
-          "id" => "parent.id"
-        ]
-      ]
-    ]
-  ];
-
-  const getRemit = [
-    graph::input => [
-      "id" => graph::integerNotNull,
-    ],
-    graph::return => [
-      "id" => graph::integer,
-      "status" => [
-        graph::type => "getRemit2",
-        graph::input => [
-          "id" => "parent.id"
-        ]
-      ]
-    ]
-  ];
-
-  const getRemit2 = [
-    graph::input => [
-      "id" => graph::integerNotNull,
-    ],
-    graph::return => [
-      "id" => graph::integer,
-      "date" => graph::string
+      "user_id" => graph::integer,
+      "payment_type" => graph::string,
+      "amount" => graph::integer,
+      "details" => graph::string,
+      "created_at" => graph::string
     ]
   ];
 }

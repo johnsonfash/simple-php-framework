@@ -13,7 +13,7 @@ class test
   protected static $connection;
 
 
-  function test($variable)
+  function getUser($id)
   {
     // self::$connection->query()->table("customers")->where('id', $id)->update([
     //   "wallet -" => $amount
@@ -25,7 +25,7 @@ class test
     $this->connect();
   }
 
-  function connect($table = 'shipping')
+  function connect($table = 'users')
   {
     self::$table = $table;
     self::$connection = db::connect();

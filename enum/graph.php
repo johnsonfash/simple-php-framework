@@ -5,25 +5,21 @@ namespace enum;
 interface graph
 {
 
-  const url = 'http://localhost/simple-php-framework';
-  const adminUrl = 'http://localhost/simple-php-framework';
-  const company_email = 'support@simple-php-framework.com';
-  const company_phone = '+2349036723177';
-  const company_address = '68 Johnston street, Sunnyside Gauteng, 0002. Pretoria, Nigeria.';
-
   //local
-
   const dbhost = "localhost";
   const dbdriver = "mysqli";
   const dbencryptionKey = "qwertyuiop";
   const dbusername = "root";
-  const db = "simple-php-framework";
+  const db = "simple-db";
   const dbpassword = "";
   const flutterKey = "FLWSECK_TEST-xxxxxxxxxxxxxxxxxxxxx347-P";
   const uploadFullPath = 'http://localhost/simple-php-framework/uploads/';
+  const runDirectory = '/simple-php-framework/';
+  const url = 'http://localhost/simple-php-framework';
+  const adminUrl = 'http://localhost/simple-php-framework';
+  const enableEmail = false;
 
   //web
-
   // const dbhost = "localhost";
   // const dbdriver = "mysqli";
   // const dbencryptionKey = "qwertyuiop";
@@ -32,12 +28,15 @@ interface graph
   // const dbpassword = "http://simple-php-framework.com";
   // const flutterKey = "FLWSECK_TEST-xxxxxxxxxxxxxxxxxxxxx347-P";
   // const uploadFullPath = 'http://simple-php-framework.com/uploads/';
+  // const runDirectory = '/';
+  // const url = 'http://localhost/simple-php-framework';
+  // const adminUrl = 'http://localhost/simple-php-framework';
+  // const enableEmail = true;
 
 
-  const query = "GRAPHQL_QUERY";
-  const map = "GRAPHQL_MAP";
-  const map_input = "GRAPHQL_MAP_INPUT";
-  const abortKeys = [self::query, self::map, self::map_input, self::compare];
+  const company_email = 'support@simple-php-framework.com';
+  const company_phone = '+2349036723177';
+  const company_address = '68 Johnston street, Sunnyside Gauteng, 0002. Pretoria, Nigeria.';
   const notNull = '!';
   const FILES = 'FILES';
   const FILE_QUERY = 'FILE_QUERY';
@@ -50,8 +49,7 @@ interface graph
   const encryptionKey = "encryptionKey";
   const Authorization = 'Authorization';
   const error = 'error';
-  const trace = 'trace';  
-  const main_query = 'MAIN_QUERY';
+  const trace = 'trace';
   const customer = 'customer';
   const admin = 'admin';
   const maxNextedQuery = 10;
@@ -68,18 +66,16 @@ interface graph
   const values = "values";
   const alias = 'alias';
   const meta = "meta";
-  const compare = 'NEXTED_QUERY_COLUMN_FOR_COMPARE';
-  const require = "require";
   const name = "name";
   const path = 'path';
   const input = "input";
   const type = "type";
   const return = "return";
-  const boolean = 'boolean';
   const integerOrString = 'integer|string';
   const integerOrStringNotNull = 'integer!|string!';
   const integerOrDouble = 'integer|double';
   const integerOrDoubleNotNull = 'integer!|double!';
+  const boolean = 'boolean';
   const booleanNotNull = 'boolean!';
   const array = 'array';
   const arrayNotNull = 'array!';
@@ -90,8 +86,9 @@ interface graph
   const string = 'string';
   const stringNotNull = 'string!';
   const null = 'null';
-  const double = 'double';
   const float = 'float';
+  const floatNotNull = 'float!';
+  const double = 'double';
   const doubleNotNull = 'double!';
   const types = [
     "array", "a",

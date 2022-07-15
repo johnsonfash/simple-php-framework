@@ -1,5 +1,9 @@
 <?php
 
+if (!simple_php_framework_qwertyuiop) {
+  exit("Access denied!");
+}
+
 use core\auth\header;
 use core\http;
 use core\router;
@@ -60,7 +64,6 @@ router::get('/graph', function () {
   return typehandler::view();
 });
 
-
 router::get('/graph/endpoint', function () {
   return typehandler::view(false);
 });
@@ -77,9 +80,4 @@ router::methodNotAllowed(function ($path, $method) {
   echo 'The requested path "' . $path . '" exists. But the request method "' . $method . '" is not allowed on this path!';
 });
 
-
-//local
-router::run('/simple-php-framework/');
-
-//web
-// router::run('/');
+router::run(graph::runDirectory);

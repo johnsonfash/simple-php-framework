@@ -10,7 +10,15 @@ trait test
 {
   public static function getUser($parent, $columns, $variables, $middleware_data)
   {
-    return [graph::data => ['id' => 1]];
+    $res = utils::build_res();
+    $model = new ModelTest();
+    $value = $model->getUser($variables->id);
+
+    if ($value[graph::error]) {
+      return $res->get_res($value);
+    }
+
+    return $res->get_res([graph::data => true]);
   }
 
   public static function getAddress($parent, $columns, $variables, $middleware_data)
@@ -36,22 +44,5 @@ trait test
   public static function getHistory($parent, $columns, $variables, $middleware_data)
   {
     return [graph::data => ['id' => 1]];
-  }
-
-  public static function getShippingFee($columns, $variables, $middleware_data)
-  {
-    $res = utils::build_res();
-    $model = new ModelTest();
-    $value = $model->test($variables);
-
-    if ($value[graph::error]) {
-      return $res->get_res($value);
-    }
-
-    return $res->get_res([graph::data => true]);
-  }
-
-  public static function getAdmin_getName()
-  {
   }
 }
