@@ -14,6 +14,8 @@ use Throwable;
 class header
 {
 
+
+
   private static $bench;
 
   public static function benchmarkStart()
@@ -22,6 +24,7 @@ class header
     $app->step('start');
     self::$bench = $app;
   }
+
 
   public static function benchmarkEnd($type = "json")
   {

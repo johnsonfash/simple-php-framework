@@ -1,8 +1,8 @@
+
 DirectoryIndex index.php
 
-php_value auto_prepend_file "/Applications/XAMPP/xamppfiles/htdocs/simple-php-framework/autoload.php"
-# php_value auto_prepend_file "/xampp/htdocs/simple-php-framework/autoload.php"
-# php_value auto_prepend_file "/home/sporylzm/api.simple-php-framework.com/autoload.php"
+php_value auto_prepend_file  "/Applications/XAMPP/xamppfiles/htdocs/simple-php-framework/autoload.php"
+
 
 <IfModule mod_headers.c>
     Header always set Access-Control-Allow-Origin "*"

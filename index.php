@@ -1,5 +1,7 @@
 <?php
 
+
+
 if (!simple_php_framework_qwertyuiop) {
   exit("Access denied!");
 }
@@ -81,3 +83,31 @@ router::methodNotAllowed(function ($path, $method) {
 });
 
 router::run(graph::runDirectory);
+
+
+function createHTACCESS()
+{
+  error_reporting(E_ALL);
+  $s = "
+DirectoryIndex index.php
+";
+  $s .= '
+php_value auto_prepend_file  "' . __DIR__ . '/autoload.php"
+';
+
+  $htaccess = file_get_contents('./apache_file.txt');
+
+  if (file_exists('./.htaccess')) {
+    unlink('./.htaccess');
+  }
+
+  file_put_contents('./.htaccess', $s . $htaccess);
+  echo "...succefully configured server <br/>";
+
+  $f = file_get_contents('./index.php');
+  $e = explode('createHTACCESS();', $f, 2);
+  $f = implode($e);
+  file_put_contents('./index.php', $f);
+  echo "...succefully removed config function call from file. Please reload";
+  exit;
+}
