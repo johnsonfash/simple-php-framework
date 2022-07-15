@@ -12,37 +12,53 @@ trait test
   {
     $res = utils::build_res();
     $model = new ModelTest();
-    $value = $model->getUser($variables->id);
+    $user = $model->getUser($variables->id, $columns);
 
-    if ($value[graph::error]) {
-      return $res->get_res($value);
-    }
-
-    return $res->get_res([graph::data => true]);
+    return $res->get_res([graph::data => $user]);
   }
 
   public static function getAddress($parent, $columns, $variables, $middleware_data)
   {
-    return [graph::data => ['id' => 1]];
+    $res = utils::build_res();
+    $model = new ModelTest();
+    $address = $model->getAddress($variables->user_id, $columns);
+
+    return $res->get_res([graph::data => $address]);
   }
 
   public static function getGeoData($parent, $columns, $variables, $middleware_data)
   {
-    return [graph::data => ['id' => 1]];
+    $res = utils::build_res();
+    $model = new ModelTest();
+    $geo_data = $model->getGeoData($variables->address_id, $columns);
+
+    return $res->get_res([graph::data => $geo_data]);
   }
 
   public static function getBio($parent, $columns, $variables, $middleware_data)
   {
-    return [graph::data => ['id' => 1]];
+    $res = utils::build_res();
+    $model = new ModelTest();
+    $user_bio = $model->getBio($variables->user_id, $columns);
+
+    return $res->get_res([graph::data => $user_bio]);
   }
 
   public static function getTimeline($parent, $columns, $variables, $middleware_data)
   {
-    return [graph::data => ['id' => 1]];
+    $res = utils::build_res();
+    $model = new ModelTest();
+    $user_timeline = $model->getTimeline($variables->user_id, $columns);
+
+    return $res->get_res([graph::data => $user_timeline]);
   }
 
   public static function getHistory($parent, $columns, $variables, $middleware_data)
   {
-    return [graph::data => ['id' => 1]];
+    $res = utils::build_res();
+    $model = new ModelTest();
+    $history = $model->getHistory($variables->user_id, $columns);
+
+    return $res->get_res([graph::data => $history]);
   }
 }

@@ -78,17 +78,19 @@ class control
     self::$batch[$__key] = $main;
     // self::$batch[$query->type . '__' . $__key] = $main;
 
-    foreach ($batch as $_value) {
-      if (isset($main[0])) {
-        $count  = count($main);
-        $value = [];
-        for ($i = 0; $i < $count; $i++) {
-          $value[] = $main[$i][$_value['find']];
+    if ($main) {
+      foreach ($batch as $_value) {
+        if (isset($main[0])) {
+          $count  = count($main);
+          $value = [];
+          for ($i = 0; $i < $count; $i++) {
+            $value[] = $main[$i][$_value['find']];
+          }
+        } else {
+          $value = $main[$_value['find']];
         }
-      } else {
-        $value = $main[$_value['find']];
+        self::dispatch($_value['query'], $main, (object) [$_value['variable'] => $value], $_value['type'], $middleware_data, $_value['key']);
       }
-      self::dispatch($_value['query'], $main, (object) [$_value['variable'] => $value], $_value['type'], $middleware_data, $_value['key']);
     }
   }
 
@@ -122,7 +124,7 @@ class control
           $val = self::combiner($value, $batched_array, $new_array[$key], $key);
           $new_array[$key] = $val;
         } else {
-          $new_array[$key] = $batched_array[$starting_key][$key];
+          $new_array[$key] = @$batched_array[$starting_key][$key];
         }
       }
       return $new_array;
@@ -130,17 +132,17 @@ class control
       return $batched_array[$starting_key];
       switch ($frontendReturn[0]) {
         case 'b':
-          return (bool) $batched_array[$starting_key];
+          return (bool) @$batched_array[$starting_key];
         case 'i':
-          return (int) $batched_array[$starting_key];
+          return (int) @$batched_array[$starting_key];
         case 'd':
-          return (float) $batched_array[$starting_key];
+          return (float) @$batched_array[$starting_key];
         case 'f':
-          return (float) $batched_array[$starting_key];
+          return (float) @$batched_array[$starting_key];
         case 's':
-          return trim(json_encode($batched_array[$starting_key]), "\"..'");
+          return @trim(json_encode($batched_array[$starting_key]), "\"..'");
         default:
-          return $batched_array[$starting_key];
+          return @$batched_array[$starting_key];
       }
     }
   }
