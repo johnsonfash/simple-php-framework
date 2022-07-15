@@ -14,7 +14,6 @@ class control
 {
   private static $batch = [];
 
-
   /**
    * dispatch query to its respective controllers
    *
@@ -26,12 +25,18 @@ class control
    */
   public static function mainThread($query, $variables, $type, $middleware_data)
   {
-    self::dispatch($query, [], $variables, $type, $middleware_data);
-    return self::$batch;
+    try {
+      self::dispatch($query, [], $variables, $type, $middleware_data, $query->type);
+      $new_array = [];
+      $data = self::combiner($query->return, self::$batch, $new_array, $query->type);
+      return [graph::error => false, graph::errorMessage => null, graph::data => $data];
+    } catch (\Throwable $e) {
+      return [graph::error => true, graph::errorMessage => $e->getMessage()];
+    }
   }
 
   /**
-   * dispatch query to its respective controllers
+   * dispatch - dispatch query to its respective controllers
    *
    * @param  object $query  e.g { type: "getUser", return: { name: "s", age: "i" } }
    * @param  object $variables e.g { id: 13 }
@@ -57,7 +62,7 @@ class control
           $explode =  explode('.', utils::first($nexted[graph::input]))[1];
           $include_column[] = $explode;
           $batch[] = [
-            'query' => (object)['type' => $nexted[graph::type], 'meta' => $value, 'return' => $type[graph::return]],
+            'query' => (object) ['type' => $nexted[graph::type], 'meta' => $value, 'return' => $type[graph::return]],
             'variable' => array_keys($nexted[graph::input])[0],
             'find' => $explode,
             'key' => $key,
@@ -70,7 +75,8 @@ class control
     }
 
     $main = self::handler($query->type, $parent, array_unique(array_merge($columns, $include_column)), $variables, $middleware_data)[graph::data];
-    self::$batch[$query->type . '__' . $__key] = $main;
+    self::$batch[$__key] = $main;
+    // self::$batch[$query->type . '__' . $__key] = $main;
 
     foreach ($batch as $_value) {
       if (isset($main[0])) {
@@ -86,17 +92,42 @@ class control
     }
   }
 
-
   /**
-   * handler handles query
+   * handler - handles calling a function to a query, along with its meta data
    *
    * @param string $controller controller method to hadle the query
    * @param array $keys model keys to compare in query
    * @param object $variables controller variables input(s) for query
-   * @return array
+   * @return mixed array | boolean | int | string
    */
   public static function handler($controller, $parent, $columns, $variables, $middleware_data)
   {
     return  call_user_func([static::class, $controller], $parent, $columns, $variables, $middleware_data);
+  }
+
+  /**
+   * comniner - handles combining queries together
+   *
+   * @param mixed $frontendReturn object | boolean | int | string
+   * @param array $batched_array query values in array
+   * @param array $new_array combined nexted + main query structure
+   * @param string $starting_key main query type to start with
+   * @return array
+   */
+  public static function combiner($frontendReturn, $batched_array, &$new_array, $starting_key)
+  {
+    if (is_object($frontendReturn)) {
+      foreach ($frontendReturn as $key => $value) {
+        if (is_object($value)) {
+          $val = self::combiner($value, $batched_array, $new_array[$key], $key);
+          $new_array[$key] = $val;
+        } else {
+          $new_array[$key] = $batched_array[$starting_key][$key];
+        }
+      }
+      return $new_array;
+    } else {
+      return $batched_array[$starting_key];
+    }
   }
 }

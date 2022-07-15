@@ -22,23 +22,21 @@ class type
     return json_encode(self::uploadType($id));
   }
 
-  public static function uploadType($id)
+  public static function uploadType($middleware_data)
   {
     $accepted = [
-      'customerProfileImage' => true,
-      'adminProfileImage' => true,
-      'shippingInvoice' => true
+      'testImageUpload' => true,
     ];
 
     if (
-      !isset($_FILES[graph::IMAGE_FILES]) ||
-      !isset($_POST[graph::IMAGE_TYPE]) ||
-      !isset($accepted[$_POST[graph::IMAGE_TYPE]])
+      !isset($_FILES[graph::FILES]) ||
+      !isset($_POST[graph::FILE_QUERY]) ||
+      !isset($accepted[$_POST[graph::FILE_QUERY]])
     ) {
       return json_encode([graph::error => true, graph::errorMessage => 'Invalid image file or type']);
     }
 
-    return  call_user_func([controlhandler::class, $_POST[graph::IMAGE_TYPE]],  $id, $_FILES[graph::IMAGE_FILES]);
+    return  call_user_func([controlhandler::class, $_POST[graph::FILE_QUERY]], $_FILES[graph::FILES], $middleware_data);
   }
 
 
@@ -50,24 +48,24 @@ class type
 
   public static function run($query, $variables = [], $middleware_data = null)
   {
-    if (!$query || !isset($query->type) || !isset($query->return)) {
-      return ['error' => true, 'errorMessage' => 'query, query.type and query.return cannot be empty or null'];
+    if (!isset($query->type) || !isset($query->return)) {
+      return [graph::error => true, graph::errorMessage => 'query, query.type and query.return cannot be empty or null'];
     }
     if (count((array)$query) !== 2) {
-      return ['error' => true, 'errorMessage' => 'query object must contain only query.type & query.return'];
+      return [graph::error => true, graph::errorMessage => 'query object must contain only query.type & query.return'];
     }
     $type = self::getConstant('static', $query->type);
-    if ($type['error']) {
+    if ($type[graph::error]) {
       return $type;
     } else {
       if (isset($type['data']['input'])) {
         $inp_handler = self::inputCheck($type['data']['input'], $variables);
-        if ($inp_handler['error']) {
+        if ($inp_handler[graph::error]) {
           return $inp_handler;
         }
       }
       $retn_handler = self::returnCheck($type['data']['return'], $query->return);
-      if ($retn_handler['error']) {
+      if ($retn_handler[graph::error]) {
         return $retn_handler;
       }
       return controlhandler::mainThread($query, $variables, $type['data'], $middleware_data);

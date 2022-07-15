@@ -39,8 +39,8 @@ interface graph
   const map_input = "GRAPHQL_MAP_INPUT";
   const abortKeys = [self::query, self::map, self::map_input, self::compare];
   const notNull = '!';
-  const IMAGE_FILES = 'IMAGE_FILES';
-  const IMAGE_TYPE = 'IMAGE_TYPE';
+  const FILES = 'FILES';
+  const FILE_QUERY = 'FILE_QUERY';
   const encPassword = 'encPassword';
   const password = 'password';
   const status = 'status';
