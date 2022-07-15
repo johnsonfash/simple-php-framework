@@ -4,6 +4,7 @@ namespace core\graphql;
 
 use core\utils;
 use enum\graph;
+use handler\typehandler;
 
 /**
  * control handles all queries in batches
@@ -11,108 +12,80 @@ use enum\graph;
  */
 class control
 {
+  private static $batch = [];
 
-  private  static $main_batch = [];
-  private  static $nexted_batch = [];
 
   /**
    * dispatch query to its respective controllers
    *
-   * @param  object $request http request variable
-   * @param  object $variables http variables, default = { }
-   * @param  array $type backend type = (array) [ query, input, return ]
-   * @return void 
+   * @param  object $query  e.g { type: "getUser", return: { name: "s", age: "i" } }
+   * @param  object $variables e.g { id: 13 }
+   * @param  array $type backendType e.g [ "input" => [ "id" : "integer!" ], "return" => [ "id" => "integer", "name" => "string", "age" => "integer"] ]
+   * @param  mixed $middleware_data interger | object i.e 12 | { "id": 12, "role": "admin"} 
+   * @return void
    */
-  public static function dispatch($request, $variables, $type, $middleware_data)
+  public static function mainThread($query, $variables, $type, $middleware_data)
   {
-    $main_query = [
-      graph::controller => $request->type,
-      graph::variables => $variables,
-      graph::keys => []
-    ];
+    self::dispatch($query, [], $variables, $type, $middleware_data);
+    return self::$batch;
+  }
 
-    $nexted_queries = [];
-    $main_key_lookout = [];
-
-
-    //batch loop
-    if ($request->return !== graph::boolean) {
-      foreach ($request->return as $key => $value) {
-        if (is_object($value)) {
-
-          if (utils::arrayInArray($type[graph::return])) {
-            $type[graph::return] = utils::first($type[graph::return]);
-          }
-          if (isset($type[graph::require][$key])) {
-            if (strpos($type[graph::require][$key], '.') !== false) {
-              $type[graph::require][$key] = utils::last(explode('.', $type[graph::require][$key]));
-            }
-            $main_query[graph::keys][] = $type[graph::require][$key];
-          }
-          $nexted_queries[$key][graph::controller] = $type[graph::return][$key][graph::query];
-          $nexted_queries[$key][graph::keys] = array_keys((array) $value);
-          if (isset($type[graph::return][$key][graph::map_input])) {
-            foreach ($type[graph::return][$key][graph::map_input] as $_key => $_value) {
-              $k = explode('.', $_key)[1];
-              $v = explode('.', $_value)[1];
-              $nexted_queries[$key][graph::variables][$k] = null;
-              $nexted_queries[$key][graph::meta][] = $v;
-              $main_key_lookout[$type[graph::require][$key]] = null;
-            }
-          } else {
-            $nexted_queries[$key][graph::variables] = (object)[];
-            $nexted_queries[$key][graph::meta] = [];
-          }
-          if (isset($type[graph::return][$key][graph::compare])) {
-            $nexted_queries[$key][graph::keys][] = $type[graph::return][$key][graph::compare];
-          }
+  /**
+   * dispatch query to its respective controllers
+   *
+   * @param  object $query  e.g { type: "getUser", return: { name: "s", age: "i" } }
+   * @param  object $variables e.g { id: 13 }
+   * @param  array $parent e.g [ "id": 13 ] | [[ "id": 12 ]] | [ ]
+   * @param  array $type backendType e.g [ "input" => [ "id" : "integer!" ], "return" => [ "id" => "integer", "name" => "string", "age" => "integer"] ]
+   * @param  mixed $middleware_data interger | object i.e 12 | { "id": 12, "role": "admin"} 
+   * @param  string $__key nexted query identifier e.g __address => attached like i.e getAddress__address
+   * @return void
+   */
+  public static function dispatch($query, $parent, $variables, $type, $middleware_data, $__key = '')
+  {
+    $columns = [];
+    $batch = [];
+    $include_column = [];
+    if (is_object($query->return) || is_array($query->return)) {
+      if (isset($query->meta)) {
+        $query->return = $query->meta;
+      }
+      foreach ($query->return as $key => $value) {
+        if (is_object($value) || is_array($value)) {
+          $nexted = $type[graph::return][$key];
+          $type = typehandler::getConstant('static', $nexted[graph::type])[graph::data];
+          $explode =  explode('.', utils::first($nexted[graph::input]))[1];
+          $include_column[] = $explode;
+          $batch[] = [
+            'query' => (object)['type' => $nexted[graph::type], 'meta' => $value, 'return' => $type[graph::return]],
+            'variable' => array_keys($nexted[graph::input])[0],
+            'find' => $explode,
+            'key' => $key,
+            'type' => $type,
+          ];
         } else {
-          $main_query[graph::keys][] = $key;
+          $columns[] = $key;
         }
       }
     }
 
-    // execute first batch query
+    $main = self::handler($query->type, $parent, array_unique(array_merge($columns, $include_column)), $variables, $middleware_data)[graph::data];
+    self::$batch[$query->type . '__' . $__key] = $main;
 
-    self::$main_batch = self::handler(
-      $main_query[graph::controller],
-      array_unique($main_query[graph::keys]),
-      $main_query[graph::variables],
-      $middleware_data
-    );
-
-    //eheck if main_batch has error
-    if (self::$main_batch['error']) {
-      return self::$main_batch;
-    } else {
-      self::$main_batch = self::$main_batch['data'];
-      if ($main_query[graph::controller] === 'customerLogin' && isset(self::$main_batch['id'])) {
-        $middleware_data = self::$main_batch['id'];
-      }
-    }
-
-    $main_key_lookout = self::variable_extractor($main_key_lookout, self::$main_batch);
-
-
-    foreach ($nexted_queries as $__key => $__value) {
-      foreach ($__value[graph::variables] as $__k => $__v) {
-        $__value[graph::variables][$__k] = isset($main_key_lookout[$type[graph::require][$__key]]) ? $main_key_lookout[$type[graph::require][$__key]] : "";
-      }
-      $single_query = self::handler(
-        $__value[graph::controller],
-        array_unique($__value[graph::keys]),
-        (object) $__value[graph::variables],
-        $middleware_data
-      );
-      if ($single_query['error']) {
-        return $single_query;
+    foreach ($batch as $_value) {
+      if (isset($main[0])) {
+        $count  = count($main);
+        $value = [];
+        for ($i = 0; $i < $count; $i++) {
+          $value[] = $main[$i][$_value['find']];
+        }
       } else {
-        self::$nexted_batch[$__key] = $single_query['data'];
+        $value = $main[$_value['find']];
       }
+      self::dispatch($_value['query'], $main, (object) [$_value['variable'] => $value], $_value['type'], $middleware_data, $_value['key']);
     }
-
-    return combiner::run(self::$main_batch, self::$nexted_batch, $request->return, $type);
   }
+
 
   /**
    * handler handles query
@@ -122,35 +95,8 @@ class control
    * @param object $variables controller variables input(s) for query
    * @return array
    */
-  public static function handler($controller, $keys, $variables, $middleware_data)
+  public static function handler($controller, $parent, $columns, $variables, $middleware_data)
   {
-    return  call_user_func([static::class, $controller], $keys, $variables, $middleware_data);
-  }
-
-  /**
-   * variable_extractor extracts keys from database array values
-   *
-   * @param  array $variables = keys to extract to array
-   * @param  array $data = array values from the database
-   * @return array
-   */
-
-  public static function variable_extractor($variables, $main_batch)
-  {
-    $final = [];
-    if (!is_bool($main_batch)) {
-      if (utils::arrayInArray($main_batch)) {
-        foreach ($main_batch as $value) {
-          foreach ($variables as $k => $v) {
-            $final[$k][] = $value[$k];
-          }
-        }
-      } else {
-        foreach ($variables as $_k => $_v) {
-          $final[$_k] = $main_batch[$_k];
-        }
-      }
-    }
-    return $final;
+    return  call_user_func([static::class, $controller], $parent, $columns, $variables, $middleware_data);
   }
 }

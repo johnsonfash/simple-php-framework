@@ -13,15 +13,11 @@ header::options();
 header::showError();
 
 router::get('/', function () {
-  return view::load('test.html');
+  return view::load('view/test.html');
 });
 
-router::json('/test', function ($request) {
-  $type = typehandler::getConstant('static', 'getUser');
-  // $retn_handler = typehandler::returnCheck2($type['data']['return'], $request->query->return);
-  $retn_handler = typehandler::inputCheck3($type['data']['input'], $request->variables);
-  return json_encode($retn_handler);
-  return json_encode($type);
+router::json('/test', function ($data) {
+  return typehandler::start($data);
 });
 
 router::json('/admin', function ($data, $user) {

@@ -10,6 +10,6 @@ class view
       if (strpos($variableName, '$') !== false) $variableName = substr($variableName, 1);
       eval('$$variableName = $variableData;');
     }
-    @include './view/' . $viewFile . (strpos($viewFile, '.') ? '' : '.php');
+    @include  $viewFile . (strpos($viewFile, '.') ? '' : '.php');
   }
 }

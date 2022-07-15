@@ -8,6 +8,36 @@ use model\test as ModelTest;
 
 trait test
 {
+  public static function getUser($parent, $columns, $variables, $middleware_data)
+  {
+    return [graph::data => ['id' => 1]];
+  }
+
+  public static function getAddress($parent, $columns, $variables, $middleware_data)
+  {
+    return [graph::data => ['id' => 1]];
+  }
+
+  public static function getGeoData($parent, $columns, $variables, $middleware_data)
+  {
+    return [graph::data => ['id' => 1]];
+  }
+
+  public static function getBio($parent, $columns, $variables, $middleware_data)
+  {
+    return [graph::data => ['id' => 1]];
+  }
+
+  public static function getTimeline($parent, $columns, $variables, $middleware_data)
+  {
+    return [graph::data => ['id' => 1]];
+  }
+
+  public static function getHistory($parent, $columns, $variables, $middleware_data)
+  {
+    return [graph::data => ['id' => 1]];
+  }
+
   public static function getShippingFee($columns, $variables, $middleware_data)
   {
     $res = utils::build_res();
