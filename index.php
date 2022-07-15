@@ -12,6 +12,47 @@ header::options();
 
 header::showError();
 
+$count = 0;
+$ar = [
+  'name' => ['id' => 1, 'love' => 'yes'],
+  'age' => ['id' => 2, 'love' => 'no'],
+  'start' => ['id' => 22, 'love' => 'starting'],
+  'bio' => ['id' => 3, 'love' => 'maybe']
+];
+
+$return = [
+  'id' => 'b',
+  'name' => [
+    'id' => 'c',
+    'age' => [
+      'id' => 'd',
+      'bio' => [
+        'id' => 'e'
+      ]
+    ]
+  ]
+];
+
+$new_arr = [];
+function nexting(&$return, &$ar, &$new_arr, $k)
+{
+  foreach ($return as $key => $value) {
+    if (is_array($value)) {
+      $val = nexting($value, $ar, $new_arr[$key], $key);
+      $new_arr[$key] = $val;
+    }
+    if (!is_array($value)) {
+      $new_arr = $ar[$k];
+    }
+  }
+  return $new_arr;
+}
+$v = nexting($return, $ar, $new_arr, 'start');
+// nexting("tosin", $arr, $count);
+echo json_encode($v);
+
+exit;
+
 router::get('/', function () {
   return view::load('view/test.html');
 });

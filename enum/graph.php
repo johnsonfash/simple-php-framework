@@ -50,7 +50,7 @@ interface graph
   const encryptionKey = "encryptionKey";
   const Authorization = 'Authorization';
   const error = 'error';
-  const trace = 'trace';
+  const trace = 'trace';  
   const main_query = 'MAIN_QUERY';
   const customer = 'customer';
   const admin = 'admin';
