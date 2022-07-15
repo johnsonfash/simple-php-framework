@@ -54,7 +54,7 @@ interface graph
   const main_query = 'MAIN_QUERY';
   const customer = 'customer';
   const admin = 'admin';
-  const maxNextedQuery = 5;
+  const maxNextedQuery = 10;
   const admin_refresh_token = 'simple_refresh_token';
   const admin_access_token = 'simple_access_token';
   const customer_access_token = 'simple_customer_access_token';

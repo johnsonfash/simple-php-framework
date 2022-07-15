@@ -168,6 +168,7 @@ class type
       $str1 = "['" . self::$build[0] . "']";
       $str2 = '';
       $count = count(self::$build);
+      if ($count > graph::maxNextedQuery) throw new Exception('nexted query for ' . self::$build[0] . ' exceeds the maximum allowed');
       for ($i = 1; $i < $count; $i++) {
         $str2 .= "['" . self::$build[$i] . "']";
       }
@@ -189,7 +190,11 @@ class type
       self::$build = [$k_1];
       foreach ($v_1[graph::return] as $k_2 => $v_2) {
         if (is_array($v_2)) {
-          self::attach($k_2, $v_2);
+          try {
+            self::attach($k_2, $v_2);
+          } catch (\Throwable $e) {
+            return json_encode([graph::error => true, graph::errorMessage => $e->getMessage()]);
+          }
         }
       }
     }
