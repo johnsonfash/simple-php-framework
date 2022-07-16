@@ -1,4 +1,4 @@
-<center><img src="./uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></center> <br/><br/>
+<img src="./uploads/simple-php.png" alt="simple-php.png" width="374" height="72" style="margin: auto; display:block;" class="jop-noMdConv"> <br/><br/>
 
 # About Simple-php-framework
 
