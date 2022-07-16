@@ -11,6 +11,7 @@ interface testType
   const getUser = [
     graph::input => [
       "id" => graph::integerNotNull,
+      "email" => graph::string
     ],
     graph::return => [
       "id" => graph::integer,

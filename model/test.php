@@ -12,6 +12,14 @@ class test
   protected static $table;
   protected static $connection;
 
+  function checkEmail($email)
+  {
+    if ($email) {
+      return self::$connection->query()->table(self::$table, ['email'])->where('email', $email)->first();
+    } else {
+      return [graph::error => true];
+    }
+  }
 
   function getUser($id, $columns)
   {

@@ -1,0 +1,316 @@
+<center><img src=":/a7d699be09ea4b5cbf4fde3881fa3ecc" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></center>
+
+# About Simple-php-framework
+
+Simple php framework is a light weight (20kb only), expressive, easy to configure, and less ambiguous framework. It comes packed with most things you need and can be easily extended to cater your needs through its simple syntax and vanilla codebase. This was built to tackle one problem at start, and that was a dynamic way to create RestApi using some ideas from GraphQL and just make api calls more fun and easy to setup.
+
+In a traditional app, you will need to create several routes just to fetch data. With simple-php-framework, it creates a graph of all your routes so you can fetch related information from different tables, records etc with just one request and one endpoint.
+
+Another advantage of using simple-php-framework is its views component. You do not need to use custom tags i.e blade syntax inside a php file anymore, just use the variable(s) assigned to the script and you are good to go, example shown below.
+
+This package contains:
+
+1.  Simple and fast routing mechanism for json, post and get request.
+2.  Easy to use views loader for public / private  files
+3.  Simple but powerful Authentication mechanism i.e header control, os, jwt and more.
+4.  Expressive database ORM
+5.  Graph mapping / live documentation / schema of all Apis.
+6.  Out of the box utilities for file upload, compression, complex to simple data manipulation functions, agonistic mail functionalities, mail templates and more
+
+Simple php framework lets you build robust applications.
+
+# Learning Simple php framework MVC
+
+## 1\. `index.php`
+
+Every request gets routed to the `index.php` page by default. So all routes, auth guards and more can be configured here.
+
+There is a `createHTACCESS();` function that creates a dynamic `.htaccess` file for you so that the right part to autoload script is used at all times.
+
+During deployment to a new server, local etc, make sure to add this function at the top of index.php script, to set up these path correctly.
+
+In `index.php`
+
+```php
+<?php
+
+createHTACCESS();
+
+.......
+```
+
+### <ins>Steps</ins>
+
+- Edit the file in `apache_file.txt` to suit your needs.
+- Include `createHTACCESS();` function at the start of `index.php`
+- Deploy your project
+- Navigate to your url  index page so the function can run itself.
+- This function creates the `.htaccess` with the right path to `autoload.php` and deletes itself from `index.php` afterwards by default. Simple reload to see the effect.
+
+Sample of `index.php` routes
+
+```php
+header::options(); //import for api request with OPTIONS i.e upload to send out a status "OK" to continue
+
+router::get('/login', function () {
+  $data = ['a'];
+  return view::load('view/login.php', $data);  // simply use the variable $data inside of login.php without issues.
+});
+
+router::json('/customer', function ($data, $user_id) {
+  if ($user_id) {
+    return typehandler::start($data, $user);  //typehandler handles all graphed apis by using one route.
+  }
+}, function () {
+  return header::auth(); //authenticates a user using i.e jwt and passes the details to main function i.e $user; 
+});
+
+router::post('/upload', function ($id) {
+  if ($id) {
+    return typehandler::upload($id); //upload files handler
+  }
+}, function () {
+  return header::auth();
+});
+
+router::get('/graph', function () {
+  return typehandler::view(); //api documentation. Very useful for frontend developers
+});
+```
+
+## 2\. `.htaccess`
+
+You can simple use an **apache** / **nginx** config file instead of `.htaccess`, but for those using shared hosting, this will be quite useful.
+
+The default **.htaccess** file comes with the basic configuration to get started.
+
+- Reroute of all request to index.php.
+- Configurable access control you can tweak to manage all Api access 
+- Allowed headers, and exposed headers which can be useful for token and jwt on the frontend.
+
+Lets start by defining the functionality of each one
+
+**1\. php\_value auto\_prepend_file**
+
+This prepends autoload.php so you don't have to. It lets you simply use namespaces and use keywords to call classes with a more defined and  agnostic syntax than using include or require, see these articles to know more.
+
+**2\. Header always set Access-Control-Expose-Headers**
+
+This lets you attach custom headers to api request, i.e the frontend can have access to read backend headers like token, jwt etc. This is incredibly useful to separate the returned api data from **token**, **jwt**, **cookies** and more which should sit at the head anyways.
+
+## 3\. `enum/graph.php`
+
+You can defined all your constants you will use through the app here. One advantage is the autocomplete features if you use the right IDE i.e vscode.
+
+## 4\. MVC
+
+The model, controllers, and views folders lets you define:
+
+- Model - database function calls that returns a result
+- Controller -  handles the frontend input, calls the right model function, manipulate data and sends the response back to the user.
+- View - handles loading a script to view, attaching variables with data, so they can be used within the view script.
+
+Samples are shown in each folder to get started.
+
+## 5\. Core folder
+
+The core is where the magic happens. auth, plugin, http request function, mail, jwt, os methods, utils, upload, router, graphql validation, assignment methods to right api and more are here. Codebase is straight forward and can be configured to suit your needs.
+
+## 6\. Database folder
+
+Database drivers are defined here.
+
+By default, this comes with `mysqli` ORM to get started, but you can easily configure it to support `postgres` and more.
+
+**NOTE:  for security, every `query()` apart from `raw();` uses prepared statement. While data are sanitised for all request by default, be sure not to include frontend user input in `raw();` unless you are sure of what you are doing.**
+
+Samples below:
+
+```php
+use database\db;
+
+$db = db::connect();
+$get_a_user = $db->query()->table('customers', ['email', 'first_name','created_at'])->where('id', 1)->first();
+
+$insert_a_ser = $db->query()->table('customers')->insert([
+      'email' => $email, 'first_name' => 'john'
+    ]);
+    
+$get_all_users = $db->query()->table('customers', array $columns)->getAll();
+
+$update_a_user = $db->query()->table('customers')->where('id', $id)->update([
+      'first_name' => $first_name
+    ]);
+    
+$limit_and_order = $db->query()->table('otp')->where('otp', $otp, 'type', 'customer_password', 'user_type', 'customer')->orderBy('id', 'desc')->limit(1)->first();
+
+$limit_and_order_type_2 = $db->query()->table('otp')->where(['otp' => $otp, 'type' => 'customer_password', 'user_type' => 'customer'])->orderBy('id', 'desc')->limit(1)->first();
+
+$delete = $db->query()->table('otp')->where('otp', $variables->otp)->delete();
+
+$pagination = $db->query()->table('customers')->where('email LIKE', '@gmail')->limit($variables->size, $variables->page)->orderBy('id', 'DESC')->getAll();
+
+$dangerous_raw_query_to_array_return = $db->raw("SELECT COUNT(CASE WHEN status = 'active' THEN 1 END) as 'active', COUNT(CASE WHEN status = 'blocked' THEN 1 END) as 'blocked', COUNT(CASE WHEN status = 'pending' THEN 1 END) as 'pending' FROM customers WHERE user_type =  'starters'");
+```
+
+## 7\. Handler folder
+
+Make sure to register all your **controller classes** in the `./handler/controlhandler.php`
+
+Also register all your **graphql/types** script in the `./handler/typehandler.php`
+
+Samples have been prepared to give you a good understanding how this works.
+
+## 8\. graphql types folder
+
+The types folder is where you define your api schema, make minute input validations and return schema. a sample looks like below
+
+By default, every type constant must match a controller function to execute. So every type must go along with a function that execute them.
+
+**NOTE:** Make sure your type constants are unique for its request.
+
+You can setup constraints on the database to make this nested queries even better.
+
+```php
+<?php
+
+namespace graphql\types;
+
+use enum\graph;
+
+interface testType
+{
+
+
+  const getUser = [
+    graph::input => [
+      "id" => graph::integerNotNull,  //a required input field to execute this function
+    ],
+    graph::return => [
+      "id" => graph::integer,
+      "email" => graph::string,
+      "username" => graph::string,
+      "first_name" => graph::string,
+      "last_name" => graph::string,
+      "age" => graph::integer,
+      "created_at" => graph::string,
+      "address" => [ //nexted query within this type, 
+        graph::type => "getAddress",
+        graph::input => [
+          "user_id" => "parent.id" //parent means the main thread value i.e ['id'=> 1, 'email' => 'fashanutosin7@gmail.com' ...]. you are mapping this id from parent to input parameter of the next query type. The nexted query must have an input field called 'user_id'
+        ]
+      ]
+    ]
+  ];
+
+  const getAddress = [
+    graph::input => [
+      "id" => graph::integerNotNull,
+      "user_id" => graph::integer // meaning you cant make direct api call to this without defining the id input, but user_id is optional. Only backend chain call can omit this feature, i.e getUser attach getAddress without calling id
+    ],
+    graph::return => [
+      "id" => graph::integer,
+      "user_id" => graph::integer,
+      "country" => graph::string,
+      "state" => graph::string,
+      "lga" => graph::string,
+      "address" => graph::string,
+      "created_at" => graph::string,
+      "geodata" => [
+        graph::type => "getGeoData",
+        graph::input => [
+          "address_id" => "parent.id"
+        ]
+      ]
+    ]
+  ];
+  
+  
+  const getGeoData = [
+    graph::input => [
+      "id" => graph::integerNotNull,
+      "address_id" => graph::integer
+    ],
+    graph::return => [
+      "id" => graph::integer,
+      "address_id" => graph::integer,
+      "user_id" => graph::integer,
+      "lat" => graph::string,
+      "lng" => graph::string,
+      "created_at" => graph::string,
+      "bio" => [
+        graph::type => "getBio",
+        graph::input => [
+          "user_id" => "parent.user_id"
+        ]
+      ]
+    ]
+  ];
+
+  const getBio = [
+    graph::input => [
+      "id" => graph::integerNotNull,
+      "user_id" => graph::integer
+    ],
+    graph::return => [
+      "id" => graph::integer,
+      "user_id" => graph::integer,
+      "user_type" => graph::string,
+      "bio" => graph::string,
+      "likes" => graph::string,
+      "created_at" => graph::string,
+      "timeline" => [
+        graph::type => "getTimeline",
+        graph::input => [
+          "user_id" => "parent.user_id"
+        ]
+      ]
+    ]
+  ];
+  
+  const getTimeline = .......
+```
+
+## 9\. Controllers
+
+By default, every controller has a `$parent` value (if called as a nested query or `[]` if its a main query, `$columns` (required columns defined from the frontend), `$variables` which can be `[]` or defined by the frontend if need be. `$middleware_data` which can be meta data like `user_id` from authenticated route or `null` from public routes.
+
+By default very controller must return an `array` which must include a `'data'` associative key. We recommend you use the build_res utility offered in the test.php sample for your build and response object, and also `graph::data`, `graph::error`, `graph::errorMessage` for autocomplete features and avoiding mistakes.
+
+Traits are used instead of classes for good implementation reasons, make use of trait in controllers
+
+```php
+<?php
+
+namespace controllers;
+
+use core\utils;
+use enum\graph;
+use model\user as ModelUser;
+
+trait user
+{
+  public static function getUser($parent, $columns, $variables, $middleware_data)
+  {
+    $res = utils::build_res();
+
+
+    $input = utils::validate($variables);
+
+    if ($input[graph::error]) {
+      return $res->get_res($input);
+    }
+
+    $model = new ModelTest();
+
+    //just a sample, might not be need here, or overkill
+    $old_user = $model->checkEmail(@$variables->email);
+
+    $user = $model->getUser($variables->id, $columns);
+
+    return $res->get_res([graph::data => $user]);
+  }
+
+......
+ }
+```

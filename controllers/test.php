@@ -11,7 +11,19 @@ trait test
   public static function getUser($parent, $columns, $variables, $middleware_data)
   {
     $res = utils::build_res();
+
+
+    $input = utils::validate($variables);
+
+    if ($input[graph::error]) {
+      return $res->get_res($input);
+    }
+
     $model = new ModelTest();
+
+    //just a sample, might not be need here, or overkill
+    $old_user = $model->checkEmail(@$variables->email);
+
     $user = $model->getUser($variables->id, $columns);
 
     return $res->get_res([graph::data => $user]);
