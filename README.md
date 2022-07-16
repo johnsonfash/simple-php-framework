@@ -1,4 +1,4 @@
-<center><img src="/Applications/Joplin.app/Contents/Resources/app.asar/uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></center>
+<center><img src="./uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></center> <br/><br/>
 
 # About Simple-php-framework
 
@@ -17,7 +17,7 @@ This package contains:
 5.  Graph mapping / live documentation / schema of all Apis.
 6.  Out of the box utilities for file upload, compression, complex to simple data manipulation functions, agonistic mail functionalities, mail templates and more
 
-Simple php framework lets you build robust applications.
+Simple php framework lets you build robust applications. <br/><br/>
 
 # Learning Simple php framework MVC
 
@@ -44,6 +44,7 @@ createHTACCESS();
 - Edit the file in `apache_file.txt` to suit your needs.
 - Include `createHTACCESS();` function at the start of `index.php`
 - Deploy your project
+- Make sure to give proper permissions to the folder, uploads directory and editable folders, index.php with `read & write access` if necessary / under. firewall.
 - Navigate to your url  index page so the function can run itself.
 - This function creates the `.htaccess` with the right path to `autoload.php` and deletes itself from `index.php` afterwards by default. Simple reload to see the effect.
 
@@ -313,4 +314,121 @@ trait user
 
 ......
  }
+```
+
+## 10\. RestApi
+
+Making api request is simple and straight forward, simple goto the PUBLIC_URL/graph to see the api type, input and return values to make your api call.
+
+The /graph list out all the available endpoints to the graph, the input parameters and return values: sample below:
+
+```javascript
+{
+  "description": {
+    "maximum": "this library only allows the maximum of two matrix query for now",
+    "requirement_1": "nexted queries should include type & optional input",
+    "note_1": "please make sure to include & handle all type of input for both main queries and nexted queries",
+    "note_2": "you can choose to include a description & name key on your API service type if you want",
+    "warning_1": "auth fields like password and token must be managed internally and not exposed to the GRAPH VIEW return keys",
+    "type": "used to specify the controller for a nexted query",
+    "input": "used map input from the main query to the input of the nexted query e.g [next_query.input => main_query.input]"
+  },
+  "types": {
+    "getAddress": {
+      "input": {
+        "id": "integer",
+        "user_id": "integer"
+      },
+      "return": {
+        "id": "integer",
+        "user_id": "integer",
+        "country": "string",
+        "state": "string",
+        "lga": "string",
+        "address": "string",
+        "created_at": "string",
+        "geodata": {
+          "id": "integer",
+          "address_id": "integer",
+          "user_id": "integer",
+          "lat": "string",
+          "lng": "string",
+          "created_at": "string",
+          "bio": {
+            "id": "integer",
+            "user_id": "integer",
+            "user_type": "string",
+            "bio": "string",
+            "likes": "string",
+            "created_at": "string",
+            "timeline": {....                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "getBio": {
+      "input": {
+        "id": "integer!",
+        "user_id": "integer"
+      },
+.......
+  }
+}
+```
+
+Check the sample below:
+
+```javascript
+const variables = { id: 1 };
+
+      const query = {
+        type: "getUser",
+        return: {
+          id: "i",
+          email: "s",
+          username: "s",
+          first_name: "s",
+          last_name: "s",
+          age: "i",
+          created_at: "s",
+          address: {
+            id: "i",
+            country: "s",
+            state: "s",
+            lga: "s",
+            address: "s",
+            geodata: {
+              id: "i",
+              lat: "s",
+              lng: "s",
+              bio: {
+                id: "i",
+                bio: "s",
+                likes: "s",
+                timeline: {
+                  id: "i",
+                  header: "s",
+                  detail: "s",
+                },
+              },
+            },
+          },
+        },
+      };
+
+      fetch("http://localhost/simple-php-framework/test", {
+        method: "post",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({ query, variables }),
+      })
+        .then((d) => {
+          return d.json();
+        })
+        .then((v) => console.log(v))
+        .catch((e) => console.log(e.message));
 ```

@@ -8,7 +8,7 @@ interface graph
   //local
   const dbhost = "localhost";
   const dbdriver = "mysqli";
-  const dbencryptionKey = "qwertyuiop";
+  const dbencryptionKey = "123456789";
   const dbusername = "root";
   const db = "simple-db";
   const dbpassword = "";
@@ -22,7 +22,7 @@ interface graph
   //web
   // const dbhost = "localhost";
   // const dbdriver = "mysqli";
-  // const dbencryptionKey = "qwertyuiop";
+  // const dbencryptionKey = "123456789";
   // const dbusername = "simple-php-framework";
   // const db = "simple-php-framework";
   // const dbpassword = "http://simple-php-framework.com";

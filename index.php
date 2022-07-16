@@ -63,7 +63,7 @@ router::json('/refresh_token', function ($data) {
 });
 
 router::get('/graph', function () {
-  return typehandler::view();  
+  return typehandler::view();
 });
 
 router::get('/graph/endpoint', function () {
