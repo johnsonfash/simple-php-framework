@@ -326,7 +326,7 @@ The /graph list out all the available endpoints to the graph, the input paramete
 ```javascript
 {
   "description": {
-    "maximum": "this library only allows the maximum of two matrix query for now",
+    "maximum": "you can set the maximum nested query in the enum 'maxNextedQuery'",
     "requirement_1": "nexted queries should include type & optional input",
     "note_1": "please make sure to include & handle all type of input for both main queries and nexted queries",
     "note_2": "you can choose to include a description & name key on your API service type if you want",
