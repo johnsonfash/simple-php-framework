@@ -1,4 +1,4 @@
-<p align="center"><img src="./uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></p>
+<img src="/Applications/Joplin.app/Contents/Resources/app.asar/uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv">
 
 # About Simple-php-framework
 
@@ -44,6 +44,7 @@ createHTACCESS();
 - Edit the file in `apache_file.txt` to suit your needs.
 - Include `createHTACCESS();` function at the start of `index.php`
 - Deploy your project
+- The composer.json is just to tell the deployment server that you are using php script language i.e heroku, digital ocean dokku deploy
 - Make sure to give proper permissions to the folder, uploads directory and editable folders, index.php with `read & write access` if necessary / under. firewall.
 - Navigate to your url  index page so the function can run itself.
 - This function creates the `.htaccess` with the right path to `autoload.php` and deletes itself from `index.php` afterwards by default. Simple reload to see the effect.
