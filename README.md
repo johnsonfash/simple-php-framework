@@ -1,8 +1,8 @@
-<center><img src=":/a7d699be09ea4b5cbf4fde3881fa3ecc" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></center>
+<center><img src="/Applications/Joplin.app/Contents/Resources/app.asar/uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></center>
 
 # About Simple-php-framework
 
-Simple php framework is a light weight (20kb only), expressive, easy to configure, and less ambiguous framework. It comes packed with most things you need and can be easily extended to cater your needs through its simple syntax and vanilla codebase. This was built to tackle one problem at start, and that was a dynamic way to create RestApi using some ideas from GraphQL and just make api calls more fun and easy to setup.
+Simple php framework is a light weight (< 1mb), expressive, easy to configure, and less ambiguous framework. It comes packed with most things you need and can be easily extended to cater your needs through its simple syntax and vanilla codebase. This was built to tackle one problem at start, and that was a dynamic way to create RestApi using some ideas from GraphQL and just make api calls more fun and easy to setup.
 
 In a traditional app, you will need to create several routes just to fetch data. With simple-php-framework, it creates a graph of all your routes so you can fetch related information from different tables, records etc with just one request and one endpoint.
 
@@ -85,18 +85,18 @@ You can simple use an **apache** / **nginx** config file instead of `.htaccess`,
 The default **.htaccess** file comes with the basic configuration to get started.
 
 - Reroute of all request to index.php.
-- Configurable access control you can tweak to manage all Api access 
+- Configurable access control you can tweak to manage all Api access
 - Allowed headers, and exposed headers which can be useful for token and jwt on the frontend.
 
 Lets start by defining the functionality of each one
 
 **1\. php\_value auto\_prepend_file**
 
-This prepends autoload.php so you don't have to. It lets you simply use namespaces and use keywords to call classes with a more defined and  agnostic syntax than using include or require, see these articles to know more.
+This prepends autoload.php so you don't have to. It lets you simply use namespaces and use keywords to call classes with a more defined and  agnostic syntax than using include or require, see these articles to know more: [namespace](https://www.php.net/manual/en/language.namespaces.php), [use](https://www.php.net/manual/en/language.namespaces.importing.php), [php autoprepend file](https://stackoverflow.com/questions/9045445/auto-prepend-php-file-using-htaccess-relative-to-htaccess-file), [htaccess](https://www.geeksforgeeks.org/what-is-htaccess-file-in-php/),  [htaccess example](https://www.php.net/manual/en/yaf.tutorials.php).
 
 **2\. Header always set Access-Control-Expose-Headers**
 
-This lets you attach custom headers to api request, i.e the frontend can have access to read backend headers like token, jwt etc. This is incredibly useful to separate the returned api data from **token**, **jwt**, **cookies** and more which should sit at the head anyways.
+This lets you attach custom headers to api request, i.e the frontend can have access to read backend headers like token, jwt etc. This is incredibly useful to separate the returned api data from **token**, **jwt**, **cookies** and more which should sit at the head anyways, check information [here](https://stackoverflow.com/questions/25673089/why-is-access-control-expose-headers-needed) for more.
 
 ## 3\. `enum/graph.php`
 
@@ -120,7 +120,7 @@ The core is where the magic happens. auth, plugin, http request function, mail, 
 
 Database drivers are defined here.
 
-By default, this comes with `mysqli` ORM to get started, but you can easily configure it to support `postgres` and more.
+By default, this comes with `mysqli` [ORM](https://stackoverflow.com/questions/1279613/what-is-an-orm-how-does-it-work-and-how-should-i-use-one) to get started, but you can easily configure it to support `postgres` and more.
 
 **NOTE:  for security, every `query()` apart from `raw();` uses prepared statement. While data are sanitised for all request by default, be sure not to include frontend user input in `raw();` unless you are sure of what you are doing.**
 
@@ -169,7 +169,7 @@ By default, every type constant must match a controller function to execute. So 
 
 **NOTE:** Make sure your type constants are unique for its request.
 
-You can setup constraints on the database to make this nested queries even better.
+You can setup [constraints](https://www.w3schools.com/sql/sql_constraints.asp#:~:text=Constraints%20are%20used%20to%20limit,column%20level%20or%20table%20level.) on the database to make this nested queries even better.
 
 ```php
 <?php
@@ -277,7 +277,7 @@ By default, every controller has a `$parent` value (if called as a nested query 
 
 By default very controller must return an `array` which must include a `'data'` associative key. We recommend you use the build_res utility offered in the test.php sample for your build and response object, and also `graph::data`, `graph::error`, `graph::errorMessage` for autocomplete features and avoiding mistakes.
 
-Traits are used instead of classes for good implementation reasons, make use of trait in controllers
+[Traits](https://www.php.net/manual/en/language.oop5.traits.php) are used instead of classes for good implementation reasons, make use of trait in controllers
 
 ```php
 <?php
