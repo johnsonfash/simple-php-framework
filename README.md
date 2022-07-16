@@ -1,4 +1,4 @@
-<p align="center"><img src="./uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></p> <br/>
+<p align="center"><img src="./uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv"></p>
 
 # About Simple-php-framework
 
@@ -17,7 +17,7 @@ This package contains:
 5.  Graph mapping / live documentation / schema of all Apis.
 6.  Out of the box utilities for file upload, compression, complex to simple data manipulation functions, agonistic mail functionalities, mail templates and more
 
-Simple php framework lets you build robust applications. <br/><br/>
+Simple php framework lets you build robust applications.
 
 # Learning Simple php framework MVC
 
