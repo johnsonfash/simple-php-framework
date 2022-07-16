@@ -1,4 +1,4 @@
-<img src="/Applications/Joplin.app/Contents/Resources/app.asar/uploads/simple-php.png" alt="simple-php.png" width="374" height="72" class="jop-noMdConv">
+<p align="center"><br/><br/><img src="./uploads/simple-php.png" alt="simple-php.png" width="374" height="72"></p>
 
 # About Simple-php-framework
 
