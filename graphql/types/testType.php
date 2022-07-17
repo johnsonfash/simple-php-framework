@@ -147,18 +147,12 @@ interface testType
       "created_at" => graph::string,
       "payment" => [
         graph::type => "getPayment",
-        graph::input => [
-          "user_id" => "parent.user_id"
-        ]
+        graph::input => []
       ]
     ]
   ];
 
   const getPayment = [
-    graph::input => [
-      "id" => graph::integerNotNull,
-      "user_id" => graph::integer
-    ],
     graph::return => [
       "id" => graph::integer,
       "user_id" => graph::integer,
