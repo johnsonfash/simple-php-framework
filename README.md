@@ -44,10 +44,10 @@ createHTACCESS();
 - Edit the file in `apache_file.txt` to suit your needs.
 - Include `createHTACCESS();` function at the start of `index.php`
 - Deploy your project
-- The composer.json is just to tell the deployment server that you are using php script language i.e heroku, digital ocean dokku deploy
-- Make sure to give proper permissions to the folder, uploads directory and editable folders, index.php with `read & write access` if necessary / under. firewall.
+- The composer.json is just to tell the server that you are using php scripting language i.e heroku, digital ocean deploy
+- Make sure to give proper permissions to the folder, uploads directory and editable folders, index.php with `read & write access` if necessary / under a firewall.
 - Navigate to your url  index page so the function can run itself.
-- This function creates the `.htaccess` with the right path to `autoload.php` and deletes itself from `index.php` afterwards by default. Simple reload to see the effect.
+- This function creates the `.htaccess` with the right path to `autoload.php` and deletes itself from `index.php` afterwards by default. Reload your browser to see the effect.
 
 **Local deploy:**
 
@@ -88,7 +88,7 @@ router::get('/graph', function () {
 
 ## 2\. `.htaccess`
 
-You can simple use an **apache** / **nginx** config file instead of `.htaccess`, but for those using shared hosting, this will be quite useful.
+You can simply use an **apache** / **nginx** config file instead of `.htaccess`, but for those using shared hosting, this will be quite useful.
 
 The default **.htaccess** file comes with the basic configuration to get started.
 
@@ -108,9 +108,9 @@ This lets you attach custom headers to api request, i.e the frontend can have ac
 
 ## 3\. `enum/graph.php`
 
-You can defined all your constants you will use through the app here. One advantage is the autocomplete features if you use the right IDE i.e vscode.
+You can defined all the constants you will use throughout the app here. One advantage of this is the autocomplete feature, if you use the right IDE i.e vs-code.
 
-## 4\. MVC
+## 4\. The MVC pattern
 
 The model, controllers, and views folders lets you define:
 
@@ -120,11 +120,11 @@ The model, controllers, and views folders lets you define:
 
 Samples are shown in each folder to get started.
 
-## 5\. Core folder
+## 5\. The `./core` folder
 
 The core is where the magic happens. auth, plugin, http request function, mail, jwt, os methods, utils, upload, router, graphql validation, assignment methods to right api and more are here. Codebase is straight forward and can be configured to suit your needs.
 
-## 6\. Database folder
+## 6\. THe Database folder
 
 Database drivers are defined here.
 
@@ -161,7 +161,9 @@ $pagination = $db->query()->table('customers')->where('email LIKE', '@gmail')->l
 $dangerous_raw_query_to_array_return = $db->raw("SELECT COUNT(CASE WHEN status = 'active' THEN 1 END) as 'active', COUNT(CASE WHEN status = 'blocked' THEN 1 END) as 'blocked', COUNT(CASE WHEN status = 'pending' THEN 1 END) as 'pending' FROM customers WHERE user_type =  'starters'");
 ```
 
-## 7\. Handler folder
+## 7\. The `./handler` folder
+
+The ./handler directory holds the `controlhandler.php` & `typehandler.php`.
 
 Make sure to register all your **controller classes** in the `./handler/controlhandler.php`
 
@@ -169,15 +171,15 @@ Also register all your **graphql/types** script in the `./handler/typehandler.ph
 
 Samples have been prepared to give you a good understanding how this works.
 
-## 8\. graphql types folder
+## 8\. The `graphql/types` folder
 
-The types folder is where you define your api schema, make minute input validations and return schema. a sample looks like below
+The graphql types folder is where you define your api schema, make minute input validations and return schema. A sample is show below.
 
-By default, every type constant must match a controller function to execute. So every type must go along with a function that execute them.
+By default, the variable name of every type constant must match the name of a controller function to execute. Which means every type must go along with a class function that execute them, examples are given in the `controllers` and `graphql/types` folders respectively.
 
-**NOTE:** Make sure your type constants are unique for its request.
+**NOTE:** Make sure the variable name of type constants are unique, else, an error.
 
-You can setup [constraints](https://www.w3schools.com/sql/sql_constraints.asp#:~:text=Constraints%20are%20used%20to%20limit,column%20level%20or%20table%20level.) on the database to make this nested queries even better.
+You can also setup [constraints](https://www.w3schools.com/sql/sql_constraints.asp#:~:text=Constraints%20are%20used%20to%20limit,column%20level%20or%20table%20level.) on the database to make this nested queries even better.
 
 ```php
 <?php
@@ -281,11 +283,11 @@ interface testType
 
 ## 9\. Controllers
 
-By default, every controller has a `$parent` value (if called as a nested query or `[]` if its a main query, `$columns` (required columns defined from the frontend), `$variables` which can be `[]` or defined by the frontend if need be. `$middleware_data` which can be meta data like `user_id` from authenticated route or `null` from public routes.
+By default, every controller has a `$parent` value (if called as a nested query or empty array: `[]`, if its the main query. `$columns` :(required columns defined from the frontend), `$variables` which can be `[]` or defined by the frontend if needed for the request. `$middleware_data` can be meta data like `user_id` from authenticated route or `null` for public routes.
 
-By default very controller must return an `array` which must include a `'data'` associative key. We recommend you use the build_res utility offered in the test.php sample for your build and response object, and also `graph::data`, `graph::error`, `graph::errorMessage` for autocomplete features and avoiding mistakes.
+By default every controller must return an `array` which must include a `'data'` associative key. It is recommended you use the `build_res` utility function offered in the test.php sample to build your response object, and also `graph::data`, `graph::error`, `graph::errorMessage` for autocomplete features and avoiding mistakes.
 
-[Traits](https://www.php.net/manual/en/language.oop5.traits.php) are used instead of classes for good implementation reasons, make use of trait in controllers
+[Traits](https://www.php.net/manual/en/language.oop5.traits.php) are used instead of classes for good implementation reasons. Make use of trait in controllers.
 
 ```php
 <?php
@@ -323,11 +325,11 @@ trait user
  }
 ```
 
-## 10\. RestApi
+## 10\. Making RestApi calls
 
-Making api request is simple and straight forward, simple goto the PUBLIC_URL/graph to see the api type, input and return values to make your api call.
+Making api request is simple and straight forward, simply goto the `PUBLIC_URL/graph` to see the api `type`, `input` and `return` values to make your api call.
 
-The /graph list out all the available endpoints to the graph, the input parameters and return values: sample below:
+The `/graph` shows all the available `endpoints` to the graph, the `input` parameters and `return` values. Sample below:
 
 ```javascript
 {
@@ -386,7 +388,7 @@ The /graph list out all the available endpoints to the graph, the input paramete
 }
 ```
 
-Check the sample below:
+Check the sample below on making a rest api request, or goto `view/test.html` to see a sample
 
 ```javascript
 const variables = { id: 1 };
@@ -394,9 +396,9 @@ const variables = { id: 1 };
       const query = {
         type: "getUser",
         return: {
-          id: "i",
-          email: "s",
-          username: "s",
+          id: "integer",    //you can use short(1 letter) or long key type. i.e "string" === "s", "boolean" === "b"
+          email: "string",
+          username: "string",
           first_name: "s",
           last_name: "s",
           age: "i",
