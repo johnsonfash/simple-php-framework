@@ -19,7 +19,7 @@ This package contains:
 
 Simple php framework lets you build robust applications.
 
-# Understanding - The simple php framework MVC
+# Learning Simple php framework MVC
 
 ## 1\. `index.php`
 
