@@ -1,6 +1,6 @@
 <?php
 
-
+createHTACCESS();
 
 if (!simple_php_framework_qwertyuiop) {
   exit("Access denied!");
