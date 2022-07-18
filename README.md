@@ -51,11 +51,11 @@ createHTACCESS();
 
 **Local deploy:**
 
-- Clone project to `xampp/lampp` `./htdocs` by opening a terminal in the directory, then `git clone https://github.com/johnsonfash/simple-php-framework.git`
-- To open up power shell on htdocs, navigate to htdocs, ctrl + shift +right click on the folder.
-- On mac, navigate to htdocs, double finger touch on the folder to open the menu list, and click open terminal on folder.
-- Create a database with the name `simple-db`, or change the `const db` from `enum/graph.php`.
-- Import the `sample-db.sql` file, and follow the steps given above. Open up `view/test.html` on your browser, i.e `http://localhost/simple-php-framework` and then `inspect` to see the logged result.
+- Clone project using `xampp/lampp` to `./htdocs` directory by opening a terminal in the directory, then `git clone https://github.com/johnsonfash/simple-php-framework.git`
+- To open up power shell on `htdocs`, navigate to `htdocs`, `ctrl + shift + right click` on the folder.
+- On mac, navigate to `htdocs`, double finger touch on the folder to open the menu list, and click `open terminal on folder`.
+- Create a database with the name `simple-db`, or change the `const db` from `enum/graph.php` to a database name you created.
+- Import the `sample-db.sql` file on the database, and follow the steps given above. Open up `view/test.html` on your browser, i.e `http://localhost/simple-php-framework` and then `inspect` to see the logged result.
 
 
 Sample of `index.php` routes
