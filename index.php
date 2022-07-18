@@ -1,6 +1,6 @@
 <?php
 
-createHTACCESS();
+
 
 if (!simple_php_framework_qwertyuiop) {
   exit("Access denied!");
@@ -108,6 +108,8 @@ php_value auto_prepend_file  "' . __DIR__ . '/autoload.php"
   $e = explode('createHTACCESS();', $f, 2);
   $f = implode($e);
   file_put_contents('./index.php', $f);
-  echo "...succefully removed config function call from file. Please reload";
+  echo "...succefully removed config function call from file. Please reload <br/>";
+  echo "...executing reload proccess";
+  header("Refresh:0");
   exit;
 }
