@@ -58,7 +58,7 @@ createHTACCESS();
 - Import the `sample-db.sql` file on the database, and follow the steps given above. Open up `view/test.html` on your browser, i.e `http://localhost/simple-php-framework` and then `inspect` to see the logged result.
 
 
-Sample of `index.php` routes
+Sample of `index.php` routes below. Goto `enum/graph.php` to change runDirectory. On localhost: `'/simple-php-framework/'`, on server: `'/'` 
 
 ```php
 header::options(); //import for api request with OPTIONS i.e upload to send out a status "OK" to continue
