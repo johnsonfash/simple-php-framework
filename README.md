@@ -25,20 +25,6 @@ Simple php framework lets you build robust applications.
 
 Every request gets routed to the `index.php` page by default. So all routes, auth guards and more can be configured here.
 
-There is a `createHTACCESS();` function that creates a dynamic `.htaccess` file for you so that the right part to autoload script is used at all times.
-
-During deployment to a new server, local etc, make sure to add this function at the top of index.php script, to set up these path correctly.
-
-In `index.php`
-
-```php
-<?php
-
-createHTACCESS();
-
-.......
-```
-
 ### <ins>Steps</ins>
 
 - Edit the file in `apache_file.txt` to suit your needs.
