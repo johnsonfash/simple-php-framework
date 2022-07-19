@@ -99,13 +99,9 @@ The default **.htaccess** file comes with the basic configuration to get started
 - Configurable access control you can tweak to manage all Api access
 - Allowed headers, and exposed headers which can be useful for token and jwt on the frontend.
 
-Lets start by defining the functionality of each one
+Lets start by defining the functionality of one 
 
-**1\. php\_value auto\_prepend_file**
-
-This prepends autoload.php so you don't have to. It lets you simply use namespaces and use keywords to call classes with a more defined and  agnostic syntax than using include or require, see these articles to know more: [namespace](https://www.php.net/manual/en/language.namespaces.php), [use](https://www.php.net/manual/en/language.namespaces.importing.php), [php autoprepend file](https://stackoverflow.com/questions/9045445/auto-prepend-php-file-using-htaccess-relative-to-htaccess-file), [htaccess](https://www.geeksforgeeks.org/what-is-htaccess-file-in-php/),  [htaccess example](https://www.php.net/manual/en/yaf.tutorials.php).
-
-**2\. Header always set Access-Control-Expose-Headers**
+**1\. Header always set Access-Control-Expose-Headers**
 
 This lets you attach custom headers to api request, i.e the frontend can have access to read backend headers like token, jwt etc. This is incredibly useful to separate the returned api data from **token**, **jwt**, **cookies** and more which should sit at the head anyways, check information [here](https://stackoverflow.com/questions/25673089/why-is-access-control-expose-headers-needed) for more.
 

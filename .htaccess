@@ -1,4 +1,5 @@
 
+DirectoryIndex index.php
 
     Header always set Access-Control-Allow-Origin "*"
 <IfModule mod_headers.c>
