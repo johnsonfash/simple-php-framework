@@ -1,7 +1,7 @@
 
 
-<IfModule mod_headers.c>
     Header always set Access-Control-Allow-Origin "*"
+<IfModule mod_headers.c>
     Header always set Access-Control-Allow-Headers "X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization, simple-php-framework_customer_refresh_token, simple-php-framework_customer_access_token, simple-php-framework_access_token, simple-php-framework_refresh_token"
     Header always set Access-Control-Expose-Headers "simple-php-framework_customer_access_token, simple-php-framework_customer_refresh_token, simple-php-framework_access_token, simple-php-framework_refresh_token"
     Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, POST, DELETE, OPTIONS"
