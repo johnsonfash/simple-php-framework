@@ -28,7 +28,6 @@ Every request gets routed to the `index.php` page by default. So all routes, aut
 ### <ins>Steps</ins>
 
 - Edit the file in `apache_file.txt` to suit your needs.
-- Include `createHTACCESS();` function at the start of `index.php`
 - Deploy your project
 - The composer.json is just to tell the server that you are using php scripting language i.e heroku, digital ocean deploy
 - Make sure to give proper permissions to the folder, uploads directory and editable folders, index.php with `read & write access` if necessary / under a firewall.
